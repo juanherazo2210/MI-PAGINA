@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOON - Plataforma de Aprendizaje</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --beige-light: #FAF5EF;
+            --beige: #F0E6D8;
+            --beige-dark: #E0D0BC;
+            --cafe-light: #8B6F47;
+            --cafe: #6B4F32;
+            --cafe-dark: #4A3520;
+            --cafe-accent: #A0784C;
+            --blanco: #FFFFFF;
+            --texto: #3A2D1F;
+            --texto-light: #6B5D4E;
+            --success: #27ae60;
+            --success-light: #d5f5e3;
+            --error: #c0392b;
+            --error-light: #fdecea;
+            --warning: #f39c12;
+            --warning-light: #fef9e7;
+            --info: #2980b9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--beige-light);
+            color: var(--texto);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        /* ====== TOPBAR ====== */
+        .topbar {
+            background: var(--cafe-dark);
+            color: var(--blanco);
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .topbar-brand i { color: var(--beige); font-size: 1.4rem; }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .topbar-user .user-name {
+            font-size: 0.9rem;
+            color: var(--beige-dark);
+        }
+
+        .topbar-user .user-avatar {
+            width: 36px; height: 36px;
+            background: var(--cafe-accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.95rem;
+        }
+
+        .btn-logout {
+            background: none; border: 1px solid var(--beige-dark);
+            color: var(--beige-dark); padding: 6px 14px;
+            border-radius: 5px; cursor: pointer; font-size: 0.8rem;
+            font-family: 'Inter', sans-serif; transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: var(--error);
+            border-color: var(--error);
+            color: #fff;
+        }
+
+        /* ====== VISTAS ====== */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* ====== SELECTOR DE IDIOMA ====== */
+        .lang-selector {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .lang-selector h2 {
+            font-size: 2.2rem;
+            color: var(--cafe-dark);
+            margin-bottom: 10px;
+        }
+
+        .lang-selector .subtitle {
+            color: var(--texto-light);
+            font-size: 1.05rem;
+            margin-bottom: 50px;
+        }
+
+        .lang-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .lang-card {
+            background: var(--blanco);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(74,53,32,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .lang-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(74,53,32,0.2);
+            border-color: var(--cafe-accent);
+        }
+
+        .lang-card .flag {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .lang-card h3 {
+            font-size: 1.5rem;
+            color: var(--cafe-dark);
+            margin-bottom: 8px;
+        }
+
+        .lang-card p {
+            color: var(--texto-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .lang-card .progress-mini {
+            background: var(--beige);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .lang-card .progress-mini-fill {
+            height: 100%;
+            background: var(--cafe-accent);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .lang-card .progress-text {
+            font-size: 0.8rem;
+            color: var(--cafe);
+            font-weight: 600;
+        }
+
+        /* ====== DASHBOARD DE NIVELES ====== */
+        .levels-dashboard {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .dash-header h2 {
+            font-size: 1.8rem;
+            color: var(--cafe-dark);
+        }
+
+        .dash-header h2 .lang-flag { margin-right: 10px; }
+
+        .btn-back {
+            padding: 10px 20px;
+            background: var(--blanco);
+            color: var(--cafe);
+            border: 2px solid var(--cafe);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-back:hover {
+            background: var(--cafe);
+            color: var(--blanco);
+        }
+
+        /* Progress general */
+        .overall-progress {
+            background: var(--blanco);
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 12px rgba(74,53,32,0.08);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .overall-progress .stat {
+            text-align: center;
+        }
+
+        .overall-progress .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cafe-dark);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .overall-progress .stat-label {
+            font-size: 0.8rem;
+            color: var(--texto-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .overall-bar {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .overall-bar .bar-bg {
+            background: var(--beige);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .overall-bar .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cafe-accent), var(--cafe));
+            border-radius: 10px;
+            transition: width 0.6s;
+        }
+
+        .overall-bar .bar-label {
+            font-size: 0.8rem;
+            color: var(--texto-light);
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        /* Levels grid */
+        .levels-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .level-card {
+            background: var(--blanco);
+            border-radius: 12px;
+            padding: 25px 30px;
+            box-shadow: 0 3px 12px rgba(74,53,32,0.08);
+            border-left: 5px solid var(--beige-dark);
+            transition: all 0.3s;
+        }
+
+        .level-card.unlocked { border-left-color: var(--cafe-accent); }
+        .level-card.completed { border-left-color: var(--success); }
+        .level-card.locked { opacity: 0.6; }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .level-header h3 {
+            font-size: 1.3rem;
+            color: var(--cafe-dark);
+        }
+
+        .level-badge {
+            padding: 4px 14px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .level-badge.beginner { background: var(--success-light); color: var(--success); }
+        .level-badge.intermediate { background: var(--warning-light); color: var(--warning); }
+        .level-badge.advanced { background: var(--error-light); color: var(--error); }
+
+        .level-desc {
+            color: var(--texto-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .level-progress {
+            background: var(--beige);
+            border-radius: 8px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .level-progress-fill {
+            height: 100%;
+            background: var(--cafe-accent);
+            border-radius: 8px;
+            transition: width 0.5s;
+        }
+
+        .level-lessons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .lesson-btn {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 2px solid var(--beige-dark);
+            background: var(--beige-light);
+            color: var(--texto);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lesson-btn i {
+            font-size: 0.9rem;
+            color: var(--cafe-accent);
+        }
+
+        .lesson-btn:hover:not(.locked) {
+            border-color: var(--cafe);
+            background: var(--blanco);
+        }
+
+        .lesson-btn.completed {
+            border-color: var(--success);
+            background: var(--success-light);
+        }
+
+        .lesson-btn.completed i { color: var(--success); }
+
+        .lesson-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ====== VISTA DE LECCIÓN ====== */
+        .lesson-view {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .lesson-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .lesson-topbar h2 {
+            font-size: 1.5rem;
+            color: var(--cafe-dark);
+        }
+
+        .lesson-progress-bar {
+            background: var(--beige);
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .lesson-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cafe-accent), var(--success));
+            border-radius: 10px;
+            transition: width 0.4s;
+        }
+
+        /* Ejercicio card */
+        .exercise-card {
+            background: var(--blanco);
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 5px 25px rgba(74,53,32,0.1);
+            text-align: center;
+            display: none;
+        }
+
+        .exercise-card.active { display: block; }
+
+        .exercise-type {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--cafe-accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .exercise-question {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--cafe-dark);
+            margin-bottom: 8px;
+        }
+
+        .exercise-hint {
+            color: var(--texto-light);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* Vocab display */
+        .vocab-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--cafe-dark);
+            margin: 20px 0;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .vocab-pronunciation {
+            color: var(--cafe-accent);
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .vocab-meaning {
+            color: var(--texto-light);
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+
+        /* Options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto 25px;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            border: 2px solid var(--beige-dark);
+            border-radius: 10px;
+            background: var(--beige-light);
+            color: var(--texto);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--cafe);
+            background: var(--blanco);
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background: var(--error-light);
+            color: var(--error);
+        }
+
+        .option-btn.disabled { cursor: not-allowed; }
+
+        /* Text input exercise */
+        .text-input-group {
+            max-width: 400px;
+            margin: 0 auto 20px;
+        }
+
+        .text-input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--beige-dark);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            background: var(--beige-light);
+            color: var(--texto);
+            transition: border-color 0.3s;
+        }
+
+        .text-input-group input:focus {
+            outline: none;
+            border-color: var(--cafe);
+            background: var(--blanco);
+        }
+
+        .text-input-group input.correct { border-color: var(--success); background: var(--success-light); }
+        .text-input-group input.wrong { border-color: var(--error); background: var(--error-light); }
+
+        .btn-check {
+            padding: 12px 35px;
+            background: var(--cafe);
+            color: var(--blanco);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-check:hover { background: var(--cafe-dark); }
+
+        .feedback-box {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-light);
+            color: var(--success);
+            border: 1px solid #a3dfbf;
+        }
+
+        .feedback-box.wrong {
+            display: block;
+            background: var(--error-light);
+            color: var(--error);
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn-next {
+            padding: 13px 40px;
+            background: var(--cafe);
+            color: var(--blanco);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            margin-top: 20px;
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .btn-next.visible { display: inline-block; }
+        .btn-next:hover { background: var(--cafe-dark); }
+
+        /* Resultado final */
+        .lesson-result {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        .lesson-result.active { display: block; }
+
+        .result-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .result-icon.great { color: var(--success); }
+        .result-icon.good { color: var(--warning); }
+        .result-icon.bad { color: var(--error); }
+
+        .result-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--cafe-dark);
+            margin-bottom: 10px;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--cafe);
+            margin: 15px 0;
+        }
+
+        .result-message {
+            color: var(--texto-light);
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .result-buttons button {
+            padding: 13px 30px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-retry { background: var(--beige); color: var(--cafe); border: 2px solid var(--cafe) !important; }
+        .btn-retry:hover { background: var(--cafe); color: var(--blanco); }
+        .btn-continue { background: var(--cafe); color: var(--blanco); }
+        .btn-continue:hover { background: var(--cafe-dark); }
+
+        /* Matching exercise */
+        .match-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px 30px;
+            max-width: 500px;
+            margin: 0 auto 20px;
+        }
+
+        .match-item {
+            padding: 12px 18px;
+            border: 2px solid var(--beige-dark);
+            border-radius: 10px;
+            background: var(--beige-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .match-item:hover:not(.matched):not(.disabled) {
+            border-color: var(--cafe);
+            background: var(--blanco);
+        }
+
+        .match-item.selected {
+            border-color: var(--cafe);
+            background: var(--cafe);
+            color: var(--blanco);
+        }
+
+        .match-item.matched {
+            border-color: var(--success);
+            background: var(--success-light);
+            color: var(--success);
+            cursor: default;
+        }
+
+        .match-item.wrong-match {
+            border-color: var(--error);
+            background: var(--error-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .lang-cards { grid-template-columns: 1fr; }
+            .options-grid { grid-template-columns: 1fr; }
+            .match-container { grid-template-columns: 1fr; }
+            .topbar { padding: 10px 15px; flex-wrap: wrap; gap: 8px; }
+            .topbar-brand { font-size: 1.1rem; }
+            .exercise-question { font-size: 1.3rem; }
+            .vocab-display { font-size: 2.2rem; }
+            .overall-progress { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="topbar-brand">
+            <i class="fas fa-moon"></i> MOON
+        </div>
+        <div class="topbar-user">
+            <span class="user-name" id="userName"></span>
+            <div class="user-avatar" id="userAvatar"></div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </button>
+        </div>
+    </div>
+
+    <!-- ====== VISTA 1: SELECCIONAR IDIOMA ====== -->
+    <div class="view active" id="viewSelectLang">
+        <div class="lang-selector">
+            <h2>¿Qué idioma quieres aprender?</h2>
+            <p class="subtitle">Selecciona un idioma para comenzar tu aventura de aprendizaje</p>
+            <div class="lang-cards">
+                <div class="lang-card" onclick="selectLanguage('english')">
+                    <div class="flag">🇬🇧</div>
+                    <h3>Inglés</h3>
+                    <p>El idioma más hablado del mundo</p>
+                    <div class="progress-mini">
+                        <div class="progress-mini-fill" id="progEnglishMini" style="width:0%"></div>
+                    </div>
+                    <span class="progress-text" id="progEnglishText">0% completado</span>
+                </div>
+                <div class="lang-card" onclick="selectLanguage('italian')">
+                    <div class="flag">🇮🇹</div>
+                    <h3>Italiano</h3>
+                    <p>La lengua del arte y la cultura</p>
+                    <div class="progress-mini">
+                        <div class="progress-mini-fill" id="progItalianMini" style="width:0%"></div>
+                    </div>
+                    <span class="progress-text" id="progItalianText">0% completado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== VISTA 2: NIVELES Y LECCIONES ====== -->
+    <div class="view" id="viewLevels">
+        <div class="levels-dashboard">
+            <div class="dash-header">
+                <h2><span class="lang-flag" id="levelFlag"></span> <span id="levelTitle"></span></h2>
+                <button class="btn-back" onclick="showView('viewSelectLang')">
+                    <i class="fas fa-arrow-left"></i> Cambiar idioma
+                </button>
+            </div>
+            <div class="overall-progress">
+                <div class="stat">
+                    <div class="stat-number" id="statLessons">0</div>
+                    <div class="stat-label">Lecciones</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="statCompleted">0</div>
+                    <div class="stat-label">Completadas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="statScore">0%</div>
+                    <div class="stat-label">Promedio</div>
+                </div>
+                <div class="overall-bar">
+                    <div class="bar-bg">
+                        <div class="bar-fill" id="overallBar" style="width:0%"></div>
+                    </div>
+                    <div class="bar-label" id="overallLabel">0% progreso total</div>
+                </div>
+            </div>
+            <div class="levels-grid" id="levelsGrid"></div>
+        </div>
+    </div>
+
+    <!-- ====== VISTA 3: LECCIÓN / EJERCICIOS ====== -->
+    <div class="view" id="viewLesson">
+        <div class="lesson-view">
+            <div class="lesson-topbar">
+                <h2 id="lessonTitle"></h2>
+                <button class="btn-back" onclick="backToLevels()">
+                    <i class="fas fa-times"></i> Salir
+                </button>
+            </div>
+            <div class="lesson-progress-bar">
+                <div class="lesson-progress-fill" id="lessonProgressFill" style="width:0%"></div>
+            </div>
+            <div id="exercisesContainer"></div>
+            <div class="lesson-result" id="lessonResult">
+                <div class="result-icon" id="resultIcon"><i class="fas fa-trophy"></i></div>
+                <h2 class="result-title" id="resultTitle">¡Lección Completada!</h2>
+                <div class="result-score" id="resultScore">100%</div>
+                <p class="result-message" id="resultMessage">Excelente trabajo</p>
+                <div class="result-buttons">
+                    <button class="btn-retry" onclick="retryLesson()"><i class="fas fa-redo"></i> Repetir</button>
+                    <button class="btn-continue" onclick="backToLevels()"><i class="fas fa-arrow-right"></i> Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ================================================
+    // BASE DE DATOS DE CONTENIDO
+    // ================================================
+    const COURSES = {
+        english: {
+            name: "Inglés",
+            flag: "🇬🇧",
+            levels: [
+                {
+                    id: 1,
+                    name: "Nivel 1 — Principiante",
+                    badge: "beginner",
+                    desc: "Saludos, números, colores y frases básicas del día a día.",
+                    lessons: [
+                        {
+                            id: "e1l1",
+                            name: "Saludos",
+                            icon: "fa-hand-wave",
+                            exercises: [
+                                { type:"vocab", word:"Hello", pronunciation:"/həˈloʊ/", meaning:"Hola", audio:"" },
+                                { type:"vocab", word:"Good morning", pronunciation:"/ɡʊd ˈmɔːrnɪŋ/", meaning:"Buenos días", audio:"" },
+                                { type:"vocab", word:"Good night", pronunciation:"/ɡʊd naɪt/", meaning:"Buenas noches", audio:"" },
+                                { type:"vocab", word:"Goodbye", pronunciation:"/ɡʊdˈbaɪ/", meaning:"Adiós", audio:"" },
+                                { type:"multiple", question:"¿Cómo se dice 'Hola' en inglés?", options:["Hello","Goodbye","Thanks","Please"], answer:0 },
+                                { type:"multiple", question:"¿Qué significa 'Good morning'?", options:["Buenas noches","Buenas tardes","Buenos días","Adiós"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Adiós'", answer:"goodbye" },
+                                { type:"multiple", question:"¿Cómo se dice 'Buenas noches'?", options:["Good morning","Good afternoon","Good evening","Good night"], answer:3 }
+                            ]
+                        },
+                        {
+                            id: "e1l2",
+                            name: "Números 1-10",
+                            icon: "fa-hashtag",
+                            exercises: [
+                                { type:"vocab", word:"One", pronunciation:"/wʌn/", meaning:"Uno" },
+                                { type:"vocab", word:"Two", pronunciation:"/tuː/", meaning:"Dos" },
+                                { type:"vocab", word:"Three", pronunciation:"/θriː/", meaning:"Tres" },
+                                { type:"vocab", word:"Five", pronunciation:"/faɪv/", meaning:"Cinco" },
+                                { type:"vocab", word:"Ten", pronunciation:"/tɛn/", meaning:"Diez" },
+                                { type:"multiple", question:"¿Cómo se escribe el número 3 en inglés?", options:["Tree","Three","Thee","Thre"], answer:1 },
+                                { type:"write", question:"Escribe en inglés el número: 5", answer:"five" },
+                                { type:"multiple", question:"¿Qué número es 'Seven'?", options:["6","8","7","9"], answer:2 },
+                                { type:"write", question:"Escribe en inglés el número: 10", answer:"ten" }
+                            ]
+                        },
+                        {
+                            id: "e1l3",
+                            name: "Colores",
+                            icon: "fa-palette",
+                            exercises: [
+                                { type:"vocab", word:"Red", pronunciation:"/rɛd/", meaning:"Rojo" },
+                                { type:"vocab", word:"Blue", pronunciation:"/bluː/", meaning:"Azul" },
+                                { type:"vocab", word:"Green", pronunciation:"/ɡriːn/", meaning:"Verde" },
+                                { type:"vocab", word:"Yellow", pronunciation:"/ˈjɛloʊ/", meaning:"Amarillo" },
+                                { type:"vocab", word:"Black", pronunciation:"/blæk/", meaning:"Negro" },
+                                { type:"multiple", question:"¿Cómo se dice 'Azul' en inglés?", options:["Red","Green","Blue","Black"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Rojo'", answer:"red" },
+                                { type:"multiple", question:"¿Qué color es 'Yellow'?", options:["Verde","Blanco","Naranja","Amarillo"], answer:3 },
+                                { type:"write", question:"Escribe en inglés: 'Negro'", answer:"black" }
+                            ]
+                        },
+                        {
+                            id: "e1l4",
+                            name: "Frases Básicas",
+                            icon: "fa-comment",
+                            exercises: [
+                                { type:"vocab", word:"Please", pronunciation:"/pliːz/", meaning:"Por favor" },
+                                { type:"vocab", word:"Thank you", pronunciation:"/θæŋk juː/", meaning:"Gracias" },
+                                { type:"vocab", word:"Yes", pronunciation:"/jɛs/", meaning:"Sí" },
+                                { type:"vocab", word:"No", pronunciation:"/noʊ/", meaning:"No" },
+                                { type:"vocab", word:"Excuse me", pronunciation:"/ɪkˈskjuːz miː/", meaning:"Disculpe" },
+                                { type:"multiple", question:"¿Cómo se dice 'Gracias'?", options:["Please","Sorry","Thank you","Excuse me"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Por favor'", answer:"please" },
+                                { type:"multiple", question:"¿Qué significa 'Excuse me'?", options:["Gracias","Disculpe","Por favor","Hola"], answer:1 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Nivel 2 — Elemental",
+                    badge: "intermediate",
+                    desc: "Familia, alimentos, días de la semana y oraciones simples.",
+                    lessons: [
+                        {
+                            id: "e2l1",
+                            name: "La Familia",
+                            icon: "fa-people-group",
+                            exercises: [
+                                { type:"vocab", word:"Mother", pronunciation:"/ˈmʌðər/", meaning:"Madre" },
+                                { type:"vocab", word:"Father", pronunciation:"/ˈfɑːðər/", meaning:"Padre" },
+                                { type:"vocab", word:"Brother", pronunciation:"/ˈbrʌðər/", meaning:"Hermano" },
+                                { type:"vocab", word:"Sister", pronunciation:"/ˈsɪstər/", meaning:"Hermana" },
+                                { type:"multiple", question:"¿Cómo se dice 'Hermano'?", options:["Sister","Father","Brother","Mother"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Madre'", answer:"mother" },
+                                { type:"multiple", question:"¿Qué significa 'Sister'?", options:["Prima","Hermana","Tía","Abuela"], answer:1 },
+                                { type:"write", question:"Escribe en inglés: 'Padre'", answer:"father" }
+                            ]
+                        },
+                        {
+                            id: "e2l2",
+                            name: "Alimentos",
+                            icon: "fa-utensils",
+                            exercises: [
+                                { type:"vocab", word:"Water", pronunciation:"/ˈwɔːtər/", meaning:"Agua" },
+                                { type:"vocab", word:"Bread", pronunciation:"/brɛd/", meaning:"Pan" },
+                                { type:"vocab", word:"Milk", pronunciation:"/mɪlk/", meaning:"Leche" },
+                                { type:"vocab", word:"Apple", pronunciation:"/ˈæpəl/", meaning:"Manzana" },
+                                { type:"multiple", question:"¿Cómo se dice 'Pan'?", options:["Milk","Water","Bread","Rice"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Agua'", answer:"water" },
+                                { type:"multiple", question:"¿Qué significa 'Apple'?", options:["Naranja","Uva","Pera","Manzana"], answer:3 },
+                                { type:"write", question:"Escribe en inglés: 'Leche'", answer:"milk" }
+                            ]
+                        },
+                        {
+                            id: "e2l3",
+                            name: "Días de la Semana",
+                            icon: "fa-calendar-days",
+                            exercises: [
+                                { type:"vocab", word:"Monday", pronunciation:"/ˈmʌndeɪ/", meaning:"Lunes" },
+                                { type:"vocab", word:"Wednesday", pronunciation:"/ˈwɛnzdeɪ/", meaning:"Miércoles" },
+                                { type:"vocab", word:"Friday", pronunciation:"/ˈfraɪdeɪ/", meaning:"Viernes" },
+                                { type:"vocab", word:"Sunday", pronunciation:"/ˈsʌndeɪ/", meaning:"Domingo" },
+                                { type:"multiple", question:"¿Cómo se dice 'Lunes'?", options:["Tuesday","Monday","Sunday","Friday"], answer:1 },
+                                { type:"write", question:"Escribe en inglés: 'Viernes'", answer:"friday" },
+                                { type:"multiple", question:"¿Qué día es 'Wednesday'?", options:["Martes","Jueves","Miércoles","Sábado"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Domingo'", answer:"sunday" }
+                            ]
+                        },
+                        {
+                            id: "e2l4",
+                            name: "Oraciones Simples",
+                            icon: "fa-pen",
+                            exercises: [
+                                { type:"vocab", word:"I am a student", pronunciation:"/aɪ æm ə ˈstuːdənt/", meaning:"Yo soy estudiante" },
+                                { type:"vocab", word:"She is my friend", pronunciation:"/ʃiː ɪz maɪ frɛnd/", meaning:"Ella es mi amiga" },
+                                { type:"vocab", word:"We are happy", pronunciation:"/wiː ɑːr ˈhæpi/", meaning:"Nosotros estamos felices" },
+                                { type:"multiple", question:"¿Cómo se dice 'Yo soy estudiante'?", options:["I am teacher","I am a student","He is student","You are student"], answer:1 },
+                                { type:"write", question:"Completa: 'She ___ my friend' (es)", answer:"is" },
+                                { type:"multiple", question:"¿Qué significa 'We are happy'?", options:["Ellos son felices","Nosotros estamos tristes","Nosotros estamos felices","Tú eres feliz"], answer:2 },
+                                { type:"write", question:"Completa: 'I ___ a student' (soy)", answer:"am" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Nivel 3 — Intermedio",
+                    badge: "advanced",
+                    desc: "Viajes, trabajo, gramática avanzada y conversaciones.",
+                    lessons: [
+                        {
+                            id: "e3l1",
+                            name: "En el Aeropuerto",
+                            icon: "fa-plane",
+                            exercises: [
+                                { type:"vocab", word:"Passport", pronunciation:"/ˈpæspɔːrt/", meaning:"Pasaporte" },
+                                { type:"vocab", word:"Boarding pass", pronunciation:"/ˈbɔːrdɪŋ pæs/", meaning:"Tarjeta de embarque" },
+                                { type:"vocab", word:"Luggage", pronunciation:"/ˈlʌɡɪdʒ/", meaning:"Equipaje" },
+                                { type:"vocab", word:"Gate", pronunciation:"/ɡeɪt/", meaning:"Puerta de embarque" },
+                                { type:"multiple", question:"¿Cómo se dice 'Pasaporte'?", options:["Ticket","License","Passport","Visa"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Equipaje'", answer:"luggage" },
+                                { type:"multiple", question:"¿Qué es un 'Boarding pass'?", options:["Pasaporte","Visa","Maleta","Tarjeta de embarque"], answer:3 },
+                                { type:"write", question:"Escribe en inglés: 'Puerta de embarque'", answer:"gate" }
+                            ]
+                        },
+                        {
+                            id: "e3l2",
+                            name: "En el Trabajo",
+                            icon: "fa-briefcase",
+                            exercises: [
+                                { type:"vocab", word:"Meeting", pronunciation:"/ˈmiːtɪŋ/", meaning:"Reunión" },
+                                { type:"vocab", word:"Deadline", pronunciation:"/ˈdɛdlaɪn/", meaning:"Fecha límite" },
+                                { type:"vocab", word:"Report", pronunciation:"/rɪˈpɔːrt/", meaning:"Informe" },
+                                { type:"vocab", word:"Schedule", pronunciation:"/ˈskɛdʒuːl/", meaning:"Horario/Agenda" },
+                                { type:"multiple", question:"¿Cómo se dice 'Reunión'?", options:["Report","Meeting","Schedule","Project"], answer:1 },
+                                { type:"write", question:"Escribe en inglés: 'Fecha límite'", answer:"deadline" },
+                                { type:"multiple", question:"¿Qué significa 'Schedule'?", options:["Reunión","Proyecto","Horario","Informe"], answer:2 },
+                                { type:"write", question:"Escribe en inglés: 'Informe'", answer:"report" }
+                            ]
+                        },
+                        {
+                            id: "e3l3",
+                            name: "Verbos Comunes",
+                            icon: "fa-language",
+                            exercises: [
+                                { type:"vocab", word:"To eat", pronunciation:"/tuː iːt/", meaning:"Comer" },
+                                { type:"vocab", word:"To drink", pronunciation:"/tuː drɪŋk/", meaning:"Beber" },
+                                { type:"vocab", word:"To work", pronunciation:"/tuː wɜːrk/", meaning:"Trabajar" },
+                                { type:"vocab", word:"To travel", pronunciation:"/tuː ˈtrævəl/", meaning:"Viajar" },
+                                { type:"multiple", question:"¿Cómo se dice 'Comer'?", options:["To drink","To eat","To cook","To buy"], answer:1 },
+                                { type:"write", question:"Escribe en inglés: 'Trabajar'", answer:"to work" },
+                                { type:"multiple", question:"¿Qué significa 'To travel'?", options:["Caminar","Correr","Conducir","Viajar"], answer:3 },
+                                { type:"write", question:"Escribe en inglés: 'Beber'", answer:"to drink" }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        italian: {
+            name: "Italiano",
+            flag: "🇮🇹",
+            levels: [
+                {
+                    id: 1,
+                    name: "Livello 1 — Principiante",
+                    badge: "beginner",
+                    desc: "Saluti, numeri, colori e frasi di base per iniziare.",
+                    lessons: [
+                        {
+                            id: "i1l1",
+                            name: "Saluti",
+                            icon: "fa-hand-wave",
+                            exercises: [
+                                { type:"vocab", word:"Ciao", pronunciation:"/tʃao/", meaning:"Hola / Adiós" },
+                                { type:"vocab", word:"Buongiorno", pronunciation:"/bwonˈdʒorno/", meaning:"Buenos días" },
+                                { type:"vocab", word:"Buona sera", pronunciation:"/ˈbwɔna ˈsera/", meaning:"Buenas tardes" },
+                                { type:"vocab", word:"Arrivederci", pronunciation:"/arriˈvedertʃi/", meaning:"Adiós (formal)" },
+                                { type:"multiple", question:"¿Cómo se dice 'Hola' en italiano?", options:["Grazie","Ciao","Prego","Scusi"], answer:1 },
+                                { type:"multiple", question:"¿Qué significa 'Buongiorno'?", options:["Buenas noches","Buenas tardes","Buenos días","Adiós"], answer:2 },
+                                { type:"write", question:"Escribe en italiano: 'Adiós (formal)'", answer:"arrivederci" },
+                                { type:"multiple", question:"'Buona sera' significa:", options:["Buenos días","Buenas tardes","Buenas noches","Bienvenido"], answer:1 }
+                            ]
+                        },
+                        {
+                            id: "i1l2",
+                            name: "Numeri 1-10",
+                            icon: "fa-hashtag",
+                            exercises: [
+                                { type:"vocab", word:"Uno", pronunciation:"/ˈuno/", meaning:"Uno" },
+                                { type:"vocab", word:"Due", pronunciation:"/ˈdue/", meaning:"Dos" },
+                                { type:"vocab", word:"Tre", pronunciation:"/tre/", meaning:"Tres" },
+                                { type:"vocab", word:"Cinque", pronunciation:"/ˈtʃinkwe/", meaning:"Cinco" },
+                                { type:"vocab", word:"Dieci", pronunciation:"/ˈdjɛtʃi/", meaning:"Diez" },
+                                { type:"multiple", question:"¿Cómo se dice '3' en italiano?", options:["Tre","Tri","Tré","Tree"], answer:0 },
+                                { type:"write", question:"Escribe en italiano el número: 5", answer:"cinque" },
+                                { type:"multiple", question:"¿Qué número es 'Dieci'?", options:["8","9","10","7"], answer:2 },
+                                { type:"write", question:"Escribe en italiano el número: 2", answer:"due" }
+                            ]
+                        },
+                        {
+                            id: "i1l3",
+                            name: "Colori",
+                            icon: "fa-palette",
+                            exercises: [
+                                { type:"vocab", word:"Rosso", pronunciation:"/ˈrosso/", meaning:"Rojo" },
+                                { type:"vocab", word:"Blu", pronunciation:"/blu/", meaning:"Azul" },
+                                { type:"vocab", word:"Verde", pronunciation:"/ˈverde/", meaning:"Verde" },
+                                { type:"vocab", word:"Giallo", pronunciation:"/ˈdʒallo/", meaning:"Amarillo" },
+                                { type:"vocab", word:"Nero", pronunciation:"/ˈnero/", meaning:"Negro" },
+                                { type:"multiple", question:"¿Cómo se dice 'Rojo' en italiano?", options:["Blu","Rosso","Verde","Nero"], answer:1 },
+                                { type:"write", question:"Escribe en italiano: 'Azul'", answer:"blu" },
+                                { type:"multiple", question:"¿Qué color es 'Giallo'?", options:["Verde","Blanco","Amarillo","Naranja"], answer:2 },
+                                { type:"write", question:"Escribe en italiano: 'Negro'", answer:"nero" }
+                            ]
+                        },
+                        {
+                            id: "i1l4",
+                            name: "Frasi di Base",
+                            icon: "fa-comment",
+                            exercises: [
+                                { type:"vocab", word:"Per favore", pronunciation:"/per faˈvore/", meaning:"Por favor" },
+                                { type:"vocab", word:"Grazie", pronunciation:"/ˈɡrattsje/", meaning:"Gracias" },
+                                { type:"vocab", word:"Sì", pronunciation:"/si/", meaning:"Sí" },
+                                { type:"vocab", word:"No", pronunciation:"/nɔ/", meaning:"No" },
+                                { type:"vocab", word:"Scusi", pronunciation:"/ˈskuzi/", meaning:"Disculpe" },
+                                { type:"multiple", question:"¿Cómo se dice 'Gracias' en italiano?", options:["Prego","Grazie","Scusi","Ciao"], answer:1 },
+                                { type:"write", question:"Escribe en italiano: 'Por favor'", answer:"per favore" },
+                                { type:"multiple", question:"¿Qué significa 'Scusi'?", options:["Gracias","Hola","Disculpe","Adiós"], answer:2 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Livello 2 — Elementare",
+                    badge: "intermediate",
+                    desc: "Famiglia, cibo, giorni della settimana e frasi semplici.",
+                    lessons: [
+                        {
+                            id: "i2l1",
+                            name: "La Famiglia",
+                            icon: "fa-people-group",
+                            exercises: [
+                                { type:"vocab", word:"Madre", pronunciation:"/ˈmadre/", meaning:"Madre" },
+                                { type:"vocab", word:"Padre", pronunciation:"/ˈpadre/", meaning:"Padre" },
+                                { type:"vocab", word:"Fratello", pronunciation:"/fraˈtɛllo/", meaning:"Hermano" },
+                                { type:"vocab", word:"Sorella", pronunciation:"/soˈrɛlla/", meaning:"Hermana" },
+                                { type:"multiple", question:"¿Cómo se dice 'Hermano' en italiano?", options:["Sorella","Padre","Fratello","Figlio"], answer:2 },
+                                { type:"write", question:"Escribe en italiano: 'Hermana'", answer:"sorella" },
+                                { type:"multiple", question:"¿Qué significa 'Padre'?", options:["Abuelo","Tío","Padre","Primo"], answer:2 },
+                                { type:"write", question:"Escribe en italiano: 'Madre'", answer:"madre" }
+                            ]
+                        },
+                        {
+                            id: "i2l2",
+                            name: "Il Cibo",
+                            icon: "fa-utensils",
+                            exercises: [
+                                { type:"vocab", word:"Acqua", pronunciation:"/ˈakkwa/", meaning:"Agua" },
+                                { type:"vocab", word:"Pane", pronunciation:"/ˈpane/", meaning:"Pan" },
+                                { type:"vocab", word:"Latte", pronunciation:"/ˈlatte/", meaning:"Leche" },
+                                { type:"vocab", word:"Mela", pronunciation:"/ˈmɛla/", meaning:"Manzana" },
+                                { type:"multiple", question:"¿Cómo se dice 'Pan' en italiano?", options:["Latte","Acqua","Pane","Riso"], answer:2 },
+                                { type:"write", question:"Escribe en italiano: 'Agua'", answer:"acqua" },
+                                { type:"multiple", question:"¿Qué significa 'Mela'?", options:["Naranja","Uva","Pera","Manzana"], answer:3 },
+                                { type:"write", question:"Escribe en italiano: 'Leche'", answer:"latte" }
+                            ]
+                        },
+                        {
+                            id: "i2l3",
+                            name: "Giorni della Settimana",
+                            icon: "fa-calendar-days",
+                            exercises: [
+                                { type:"vocab", word:"Lunedì", pronunciation:"/luneˈdi/", meaning:"Lunes" },
+                                { type:"vocab", word:"Mercoledì", pronunciation:"/merkoˈledi/", meaning:"Miércoles" },
+                                { type:"vocab", word:"Venerdì", pronunciation:"/venerˈdi/", meaning:"Viernes" },
+                                { type:"vocab", word:"Domenica", pronunciation:"/doˈmenika/", meaning:"Domingo" },
+                                { type:"multiple", question:"¿Cómo se dice 'Lunes' en italiano?", options:["Martedì","Lunedì","Domenica","Venerdì"], answer:1 },
+                                { type:"write", question:"Escribe en italiano: 'Viernes'", answer:"venerdì" },
+                                { type:"multiple", question:"¿Qué día es 'Mercoledì'?", options:["Martes","Jueves","Miércoles","Sábado"], answer:2 },
+                                { type:"write", question:"Escribe en italiano: 'Domingo'", answer:"domenica" }
+                            ]
+                        },
+                        {
+                            id: "i2l4",
+                            name: "Frasi Semplici",
+                            icon: "fa-pen",
+                            exercises: [
+                                { type:"vocab", word:"Io sono studente", pronunciation:"/ˈio ˈsono stuˈdɛnte/", meaning:"Yo soy estudiante" },
+                                { type:"vocab", word:"Lei è la mia amica", pronunciation:"/ˈlɛi ɛ la ˈmia aˈmika/", meaning:"Ella es mi amiga" },
+                                { type:"vocab", word:"Noi siamo felici", pronunciation:"/noi ˈsjamo feˈlitʃi/", meaning:"Nosotros estamos felices" },
+                                { type:"multiple", question:"¿Cómo se dice 'Yo soy estudiante'?", options:["Io sono insegnante","Io sono studente","Tu sei studente","Lui è studente"], answer:1 },
+                                { type:"write", question:"Completa: 'Io ___ studente' (soy)", answer:"sono" },
+                                { type:"multiple", question:"¿Qué significa 'Noi siamo felici'?", options:["Ellos son felices","Nosotros estamos tristes","Nosotros estamos felices","Tú eres feliz"], answer:2 },
+                                { type:"write", question:"Completa: 'Lei ___ la mia amica' (es)", answer:"è" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Livello 3 — Intermedio",
+                    badge: "advanced",
+                    desc: "Viaggi, lavoro, verbi comuni e conversazioni pratiche.",
+                    lessons: [
+                        {
+                            id: "i3l1",
+                            name: "All'Aeroporto",
+                            icon: "fa-plane",
+                            exercises: [
+                                { type:"vocab", word:"Passaporto", pronunciation:"/passaˈpɔrto/", meaning:"Pasaporte" },
+                                { type:"vocab", word:"Carta d'imbarco", pronunciation:"/ˈkarta dimˈbarko/", meaning:"Tarjeta de embarque" },
+                                { type:"vocab", word:"Bagaglio", pronunciation:"/baˈɡaʎʎo/", meaning:"Equipaje" },
+                                { type:"vocab", word:"Uscita", pronunciation:"/uˈʃita/", meaning:"Puerta/Salida" },
+                                { type:"multiple", question:"¿Cómo se dice 'Pasaporte' en italiano?", options:["Biglietto","Passaporto","Valigia","Visto"], answer:1 },
+                                { type:"write", question:"Escribe en italiano: 'Equipaje'", answer:"bagaglio" },
+                                { type:"multiple", question:"¿Qué es 'Carta d'imbarco'?", options:["Pasaporte","Visa","Maleta","Tarjeta de embarque"], answer:3 },
+                                { type:"write", question:"Escribe en italiano: 'Pasaporte'", answer:"passaporto" }
+                            ]
+                        },
+                        {
+                            id: "i3l2",
+                            name: "Al Lavoro",
+                            icon: "fa-briefcase",
+                            exercises: [
+                                { type:"vocab", word:"Riunione", pronunciation:"/riunˈjone/", meaning:"Reunión" },
+                                { type:"vocab", word:"Scadenza", pronunciation:"/skaˈdɛntsa/", meaning:"Fecha límite" },
+                                { type:"vocab", word:"Rapporto", pronunciation:"/rapˈpɔrto/", meaning:"Informe" },
+                                { type:"vocab", word:"Orario", pronunciation:"/oˈrarjo/", meaning:"Horario" },
+                                { type:"multiple", question:"¿Cómo se dice 'Reunión' en italiano?", options:["Rapporto","Riunione","Orario","Progetto"], answer:1 },
+                                { type:"write", question:"Escribe en italiano: 'Fecha límite'", answer:"scadenza" },
+                                { type:"multiple", question:"¿Qué significa 'Orario'?", options:["Reunión","Proyecto","Horario","Informe"], answer:2 },
+                                { type:"write", question:"Escribe en italiano: 'Informe'", answer:"rapporto" }
+                            ]
+                        },
+                        {
+                            id: "i3l3",
+                            name: "Verbi Comuni",
+                            icon: "fa-language",
+                            exercises: [
+                                { type:"vocab", word:"Mangiare", pronunciation:"/manˈdʒare/", meaning:"Comer" },
+                                { type:"vocab", word:"Bere", pronunciation:"/ˈbere/", meaning:"Beber" },
+                                { type:"vocab", word:"Lavorare", pronunciation:"/lavoˈrare/", meaning:"Trabajar" },
+                                { type:"vocab", word:"Viaggiare", pronunciation:"/vjadˈdʒare/", meaning:"Viajar" },
+                                { type:"multiple", question:"¿Cómo se dice 'Comer' en italiano?", options:["Bere","Mangiare","Cucinare","Comprare"], answer:1 },
+                                { type:"write", question:"Escribe en italiano: 'Trabajar'", answer:"lavorare" },
+                                { type:"multiple", question:"¿Qué significa 'Viaggiare'?", options:["Caminar","Correr","Conducir","Viajar"], answer:3 },
+                                { type:"write", question:"Escribe en italiano: 'Beber'", answer:"bere" }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
+    // ================================================
+    // ESTADO DE LA APLICACIÓN
+    // ================================================
+    let currentUser = null;
+    let currentLang = null;
+    let currentLesson = null;
+    let currentExerciseIndex = 0;
+    let lessonScore = 0;
+    let lessonTotal = 0;
+
+    // ================================================
+    // INICIALIZACIÓN
+    // ================================================
+    function init() {
+        const userData = localStorage.getItem('moonCurrentUser');
+        if (!userData) {
+            window.location.href = 'login.html';
+            return;
+        }
+        currentUser = JSON.parse(userData);
+        if (!currentUser.progress) {
+            currentUser.progress = {
+                english: { level: 1, lessons: {} },
+                italian: { level: 1, lessons: {} }
+            };
+        }
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+        updateMiniProgress();
+    }
+
+    function logout() {
+        localStorage.removeItem('moonCurrentUser');
+        window.location.href = 'login.html';
+    }
+
+    function saveProgress() {
+        localStorage.setItem('moonCurrentUser', JSON.stringify(currentUser));
+        // También actualizar en el array de usuarios
+        let users = JSON.parse(localStorage.getItem('moonUsers') || '[]');
+        const idx = users.findIndex(u => u.email === currentUser.email);
+        if (idx !== -1) {
+            users[idx] = currentUser;
+            localStorage.setItem('moonUsers', JSON.stringify(users));
+        }
+    }
+
+    // ================================================
+    // NAVEGACIÓN ENTRE VISTAS
+    // ================================================
+    function showView(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // ================================================
+    // PROGRESO MINI (selector de idioma)
+    // ================================================
+    function updateMiniProgress() {
+        ['english', 'italian'].forEach(lang => {
+            const course = COURSES[lang];
+            let total = 0, completed = 0;
+            course.levels.forEach(level => {
+                level.lessons.forEach(lesson => {
+                    total++;
+                    if (currentUser.progress[lang].lessons[lesson.id] &&
+                        currentUser.progress[lang].lessons[lesson.id].completed) {
+                        completed++;
+                    }
+                });
+            });
+            const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const prefix = lang === 'english' ? 'English' : 'Italian';
+            document.getElementById('prog' + prefix + 'Mini').style.width = pct + '%';
+            document.getElementById('prog' + prefix + 'Text').textContent = pct + '% completado';
+        });
+    }
+
+    // ================================================
+    // SELECCIONAR IDIOMA
+    // ================================================
+    function selectLanguage(lang) {
+        currentLang = lang;
+        renderLevels();
+        showView('viewLevels');
+    }
+
+    // ================================================
+    // RENDERIZAR NIVELES
+    // ================================================
+    function renderLevels() {
+        const course = COURSES[currentLang];
+        document.getElementById('levelFlag').textContent = course.flag;
+        document.getElementById('levelTitle').textContent = course.name;
+
+        const progress = currentUser.progress[currentLang];
+        let totalLessons = 0, completedLessons = 0, totalScore = 0;
+
+        course.levels.forEach(level => {
+            level.lessons.forEach(lesson => {
+                totalLessons++;
+                const lp = progress.lessons[lesson.id];
+                if (lp && lp.completed) {
+                    completedLessons++;
+                    totalScore += (lp.score || 0);
+                }
+            });
+        });
+
+        const overallPct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+        const avgScore = completedLessons > 0 ? Math.round(totalScore / completedLessons) : 0;
+
+        document.getElementById('statLessons').textContent = totalLessons;
+        document.getElementById('statCompleted').textContent = completedLessons;
+        document.getElementById('statScore').textContent = avgScore + '%';
+        document.getElementById('overallBar').style.width = overallPct + '%';
+        document.getElementById('overallLabel').textContent = overallPct + '% progreso total';
+
+        const grid = document.getElementById('levelsGrid');
+        grid.innerHTML = '';
+
+        course.levels.forEach((level, levelIdx) => {
+            const isUnlocked = levelIdx === 0 || isLevelComplete(course.levels[levelIdx - 1]);
+            const isComplete = isLevelComplete(level);
+
+            let stateClass = 'locked';
+            if (isComplete) stateClass = 'completed';
+            else if (isUnlocked) stateClass = 'unlocked';
+
+            const levelCompletedCount = level.lessons.filter(l =>
+                progress.lessons[l.id] && progress.lessons[l.id].completed
+            ).length;
+            const levelPct = Math.round((levelCompletedCount / level.lessons.length) * 100);
+
+            let html = `
+                <div class="level-card ${stateClass}">
+                    <div class="level-header">
+                        <h3>${isComplete ? '<i class="fas fa-check-circle" style="color:var(--success);margin-right:8px;"></i>' : isUnlocked ? '<i class="fas fa-lock-open" style="color:var(--cafe-accent);margin-right:8px;"></i>' : '<i class="fas fa-lock" style="color:var(--beige-dark);margin-right:8px;"></i>'}${level.name}</h3>
+                        <span class="level-badge ${level.badge}">${level.badge === 'beginner' ? 'Principiante' : level.badge === 'intermediate' ? 'Elemental' : 'Intermedio'}</span>
+                    </div>
+                    <p class="level-desc">${level.desc}</p>
+                    <div class="level-progress"><div class="level-progress-fill" style="width:${levelPct}%"></div></div>
+                    <div class="level-lessons">
+            `;
+
+            level.lessons.forEach((lesson, lessonIdx) => {
+                const lp = progress.lessons[lesson.id];
+                const lessonCompleted = lp && lp.completed;
+                const prevCompleted = lessonIdx === 0 || (progress.lessons[level.lessons[lessonIdx - 1].id] && progress.lessons[level.lessons[lessonIdx - 1].id].completed);
+                const lessonUnlocked = isUnlocked && (lessonIdx === 0 || prevCompleted);
+
+                let btnClass = 'lesson-btn';
+                if (lessonCompleted) btnClass += ' completed';
+                else if (!lessonUnlocked) btnClass += ' locked';
+
+                const iconClass = lessonCompleted ? 'fa-check-circle' : (lesson.icon || 'fa-book');
+                const onclick = lessonUnlocked ? `onclick="startLesson('${currentLang}', ${level.id}, '${lesson.id}')"` : '';
+
+                html += `<button class="${btnClass}" ${onclick}>
+                    <i class="fas ${iconClass}"></i> ${lesson.name}
+                    ${lessonCompleted && lp.score ? '<small style="margin-left:auto;color:var(--success);">' + lp.score + '%</small>' : ''}
+                </button>`;
+            });
+
+            html += '</div></div>';
+            grid.innerHTML += html;
+        });
+    }
+
+    function isLevelComplete(level) {
+        const progress = currentUser.progress[currentLang];
+        return level.lessons.every(l => progress.lessons[l.id] && progress.lessons[l.id].completed);
+    }
+
+    // ================================================
+    // INICIAR LECCIÓN
+    // ================================================
+    function startLesson(lang, levelId, lessonId) {
+        const course = COURSES[lang];
+        const level = course.levels.find(l => l.id === levelId);
+        const lesson = level.lessons.find(l => l.id === lessonId);
+
+        currentLesson = { lang, levelId, lessonId, lesson };
+        currentExerciseIndex = 0;
+        lessonScore = 0;
+        lessonTotal = lesson.exercises.filter(e => e.type !== 'vocab').length;
+
+        document.getElementById('lessonTitle').textContent = course.flag + ' ' + lesson.name;
+        document.getElementById('lessonResult').classList.remove('active');
+
+        renderExercises();
+        showView('viewLesson');
+    }
+
+    function renderExercises() {
+        const container = document.getElementById('exercisesContainer');
+        container.innerHTML = '';
+
+        const exercises = currentLesson.lesson.exercises;
+        exercises.forEach((ex, i) => {
+            const div = document.createElement('div');
+            div.className = 'exercise-card' + (i === 0 ? ' active' : '');
+            div.id = 'exercise-' + i;
+            div.innerHTML = buildExerciseHTML(ex, i);
+            container.appendChild(div);
+        });
+
+        updateLessonProgress();
+    }
+
+    function buildExerciseHTML(ex, idx) {
+        const total = currentLesson.lesson.exercises.length;
+        const counter = `<div class="exercise-type">Ejercicio ${idx + 1} de ${total}</div>`;
+
+        if (ex.type === 'vocab') {
+            return `
+                ${counter}
+                <p class="exercise-type" style="color:var(--success);"><i class="fas fa-book-open"></i> VOCABULARIO</p>
+                <div class="vocab-display">${ex.word}</div>
+                <div class="vocab-pronunciation">${ex.pronunciation}</div>
+                <div class="vocab-meaning"><strong>Significado:</strong> ${ex.meaning}</div>
+                <button class="btn-next visible" onclick="nextExercise(${idx})">
+                    Continuar <i class="fas fa-arrow-right"></i>
+                </button>
+            `;
+        }
+
+        if (ex.type === 'multiple') {
+            let optionsHtml = '<div class="options-grid">';
+            ex.options.forEach((opt, oi) => {
+                optionsHtml += `<button class="option-btn" onclick="checkMultiple(${idx}, ${oi}, ${ex.answer})">${opt}</button>`;
+            });
+            optionsHtml += '</div>';
+
+            return `
+                ${counter}
+                <p class="exercise-type"><i class="fas fa-list-check"></i> SELECCIÓN MÚLTIPLE</p>
+                <h3 class="exercise-question">${ex.question}</h3>
+                <p class="exercise-hint">Selecciona la respuesta correcta</p>
+                ${optionsHtml}
+                <div class="feedback-box" id="feedback-${idx}"></div>
+                <button class="btn-next" id="next-${idx}" onclick="nextExercise(${idx})">
+                    Continuar <i class="fas fa-arrow-right"></i>
+                </button>
+            `;
+        }
+
+        if (ex.type === 'write') {
+            return `
+                ${counter}
+                <p class="exercise-type"><i class="fas fa-keyboard"></i> ESCRITURA</p>
+                <h3 class="exercise-question">${ex.question}</h3>
+                <p class="exercise-hint">Escribe tu respuesta</p>
+                <div class="text-input-group">
+                    <input type="text" id="writeInput-${idx}" placeholder="Escribe aquí..." autocomplete="off">
+                </div>
+                <button class="btn-check" onclick="checkWrite(${idx})">
+                    <i class="fas fa-check"></i> Comprobar
+                </button>
+                <div class="feedback-box" id="feedback-${idx}"></div>
+                <button class="btn-next" id="next-${idx}" onclick="nextExercise(${idx})">
+                    Continuar <i class="fas fa-arrow-right"></i>
+                </button>
+            `;
+        }
+
+        return '';
+    }
+
+    // ================================================
+    // VERIFICAR RESPUESTAS
+    // ================================================
+    function checkMultiple(exIdx, selected, correct) {
+        const card = document.getElementById('exercise-' + exIdx);
+        const buttons = card.querySelectorAll('.option-btn');
+        const feedback = document.getElementById('feedback-' + exIdx);
+        const nextBtn = document.getElementById('next-' + exIdx);
+
+        buttons.forEach((btn, i) => {
+            btn.classList.add('disabled');
+            if (i === correct) btn.classList.add('correct');
+            if (i === selected && i !== correct) btn.classList.add('wrong');
+        });
+
+        if (selected === correct) {
+            lessonScore++;
+            feedback.className = 'feedback-box correct';
+            feedback.innerHTML = '<i class="fas fa-check-circle"></i> ¡Correcto! ¡Muy bien!';
+        } else {
+            feedback.className = 'feedback-box wrong';
+            feedback.innerHTML = '<i class="fas fa-times-circle"></i> Incorrecto. La respuesta correcta es: <strong>' + buttons[correct].textContent + '</strong>';
+        }
+
+        nextBtn.classList.add('visible');
+    }
+
+    function checkWrite(exIdx) {
+        const ex = currentLesson.lesson.exercises[exIdx];
+        const input = document.getElementById('writeInput-' + exIdx);
+        const feedback = document.getElementById('feedback-' + exIdx);
+        const nextBtn = document.getElementById('next-' + exIdx);
+        const userAnswer = input.value.trim().toLowerCase();
+        const correctAnswer = ex.answer.toLowerCase();
+
+        input.disabled = true;
+
+        if (userAnswer === correctAnswer) {
+            lessonScore++;
+            input.classList.add('correct');
+            feedback.className = 'feedback-box correct';
+            feedback.innerHTML = '<i class="fas fa-check-circle"></i> ¡Correcto! ¡Excelente!';
+        } else {
+            input.classList.add('wrong');
+            feedback.className = 'feedback-box wrong';
+            feedback.innerHTML = '<i class="fas fa-times-circle"></i> Incorrecto. La respuesta correcta es: <strong>' + ex.answer + '</strong>';
+        }
+
+        nextBtn.classList.add('visible');
+    }
+
+    // ================================================
+    // SIGUIENTE EJERCICIO
+    // ================================================
+    function nextExercise(currentIdx) {
+        const exercises = currentLesson.lesson.exercises;
+        const nextIdx = currentIdx + 1;
+
+        document.getElementById('exercise-' + currentIdx).classList.remove('active');
+
+        if (nextIdx < exercises.length) {
+            document.getElementById('exercise-' + nextIdx).classList.add('active');
+            currentExerciseIndex = nextIdx;
+            updateLessonProgress();
+
+            // Focus en input si es tipo write
+            const nextEx = exercises[nextIdx];
+            if (nextEx.type === 'write') {
+                setTimeout(() => {
+                    const input = document.getElementById('writeInput-' + nextIdx);
+                    if (input) input.focus();
+                }, 100);
+            }
+        } else {
+            finishLesson();
+        }
+    }
+
+    function updateLessonProgress() {
+        const total = currentLesson.lesson.exercises.length;
+        const pct = Math.round(((currentExerciseIndex) / total) * 100);
+        document.getElementById('lessonProgressFill').style.width = pct + '%';
+    }
+
+    // ================================================
+    // FINALIZAR LECCIÓN
+    // ================================================
+    function finishLesson() {
+        const scorePct = lessonTotal > 0 ? Math.round((lessonScore / lessonTotal) * 100) : 100;
+
+        // Guardar progreso
+        const langProgress = currentUser.progress[currentLesson.lang];
+        langProgress.lessons[currentLesson.lessonId] = {
+            completed: true,
+            score: scorePct,
+            date: new Date().toISOString()
+        };
+
+        // Actualizar nivel si se completaron todas las lecciones del nivel actual
+        const course = COURSES[currentLesson.lang];
+        const level = course.levels.find(l => l.id === currentLesson.levelId);
+        if (isLevelCompleteCheck(level, langProgress)) {
+            const nextLevel = currentLesson.levelId + 1;
+            if (nextLevel > langProgress.level) {
+                langProgress.level = nextLevel;
+            }
+        }
+
+        saveProgress();
+
+        // Mostrar resultado
+        document.getElementById('lessonProgressFill').style.width = '100%';
+        const resultDiv = document.getElementById('lessonResult');
+        const icon = document.getElementById('resultIcon');
+        const title = document.getElementById('resultTitle');
+        const score = document.getElementById('resultScore');
+        const msg = document.getElementById('resultMessage');
+
+        score.textContent = scorePct + '%';
+
+        if (scorePct >= 80) {
+            icon.innerHTML = '<i class="fas fa-trophy"></i>';
+            icon.className = 'result-icon great';
+            title.textContent = '¡Excelente!';
+            msg.textContent = '¡Fantástico trabajo! Dominas muy bien este tema.';
+        } else if (scorePct >= 50) {
+            icon.innerHTML = '<i class="fas fa-star-half-alt"></i>';
+            icon.className = 'result-icon good';
+            title.textContent = '¡Buen trabajo!';
+            msg.textContent = 'Vas por buen camino. Practica un poco más para mejorar.';
+        } else {
+            icon.innerHTML = '<i class="fas fa-book-reader"></i>';
+            icon.className = 'result-icon bad';
+            title.textContent = 'Sigue practicando';
+            msg.textContent = 'No te preocupes, repite la lección para mejorar tu puntuación.';
+        }
+
+        resultDiv.classList.add('active');
+    }
+
+    function isLevelCompleteCheck(level, progress) {
+        return level.lessons.every(l => progress.lessons[l.id] && progress.lessons[l.id].completed);
+    }
+
+    function retryLesson() {
+        startLesson(currentLesson.lang, currentLesson.levelId, currentLesson.lessonId);
+    }
+
+    function backToLevels() {
+        updateMiniProgress();
+        renderLevels();
+        showView('viewLevels');
+    }
+
+    // Iniciar app
+    init();
+    </script>
+
+</body>
+</html>

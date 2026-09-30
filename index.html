@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOON - Plataforma de Aprendizaje de Lenguas</title>
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Devicon para logos de tecnologías -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           VARIABLES Y RESET
+           ============================================ */
+        :root {
+            --beige-light: #FAF5EF;
+            --beige: #F0E6D8;
+            --beige-dark: #E0D0BC;
+            --cafe-light: #8B6F47;
+            --cafe: #6B4F32;
+            --cafe-dark: #4A3520;
+            --cafe-accent: #A0784C;
+            --blanco: #FFFFFF;
+            --texto: #3A2D1F;
+            --texto-light: #6B5D4E;
+            --sombra: rgba(74, 53, 32, 0.1);
+            --sombra-fuerte: rgba(74, 53, 32, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--texto);
+            background-color: var(--beige-light);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--cafe-dark);
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--texto-light);
+            font-size: 1.05rem;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--cafe-accent);
+            margin: 15px auto 20px;
+            border-radius: 2px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* ============================================
+           BARRA DE NAVEGACIÓN
+           ============================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: var(--blanco);
+            box-shadow: 0 2px 15px var(--sombra);
+            transition: all 0.3s ease;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand .logo-icon {
+            font-size: 1.8rem;
+            color: var(--cafe);
+        }
+
+        .navbar-brand h1 {
+            font-size: 1.6rem;
+            color: var(--cafe-dark);
+            letter-spacing: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--texto);
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--cafe);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--cafe-accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background-color: var(--cafe-dark);
+            transition: all 0.3s;
+        }
+
+        /* ============================================
+           SECCIÓN INICIO / HERO
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--beige) 0%, var(--beige-light) 50%, var(--beige-dark) 100%);
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--beige-dark) 0%, transparent 70%);
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 750px;
+            padding: 0 20px;
+        }
+
+        .hero-content .hero-icon {
+            font-size: 4rem;
+            color: var(--cafe);
+            margin-bottom: 20px;
+        }
+
+        .hero-content h2 {
+            font-size: 3.5rem;
+            color: var(--cafe-dark);
+            margin-bottom: 10px;
+            letter-spacing: 5px;
+        }
+
+        .hero-content .tagline {
+            font-size: 1.3rem;
+            color: var(--cafe-accent);
+            font-weight: 500;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--texto-light);
+            margin-bottom: 35px;
+            line-height: 1.8;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 14px 35px;
+            background-color: var(--cafe);
+            color: var(--blanco);
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--cafe-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--sombra-fuerte);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 14px 35px;
+            background-color: transparent;
+            color: var(--cafe);
+            border: 2px solid var(--cafe);
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 15px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--cafe);
+            color: var(--blanco);
+        }
+
+        /* ============================================
+           SECCIÓN NOSOTROS
+           ============================================ */
+        .nosotros {
+            background-color: var(--blanco);
+        }
+
+        .nosotros-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .nosotros-text h3 {
+            font-size: 1.6rem;
+            color: var(--cafe-dark);
+            margin-bottom: 15px;
+        }
+
+        .nosotros-text p {
+            color: var(--texto-light);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .nosotros-image {
+            background: var(--beige);
+            border-radius: 10px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: var(--cafe-accent);
+        }
+
+        .valores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .valor-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--beige-light);
+            border-radius: 10px;
+            border: 1px solid var(--beige-dark);
+        }
+
+        .valor-card i {
+            font-size: 2.5rem;
+            color: var(--cafe);
+            margin-bottom: 15px;
+        }
+
+        .valor-card h4 {
+            font-size: 1.1rem;
+            color: var(--cafe-dark);
+            margin-bottom: 8px;
+        }
+
+        .valor-card p {
+            font-size: 0.9rem;
+            color: var(--texto-light);
+        }
+
+        .mision-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .mision-card, .vision-card {
+            padding: 35px;
+            border-radius: 10px;
+            border-left: 4px solid var(--cafe);
+            background: var(--beige-light);
+        }
+
+        .mision-card h3, .vision-card h3 {
+            font-size: 1.4rem;
+            color: var(--cafe-dark);
+            margin-bottom: 15px;
+        }
+
+        .mision-card h3 i, .vision-card h3 i {
+            margin-right: 10px;
+            color: var(--cafe);
+        }
+
+        .mision-card p, .vision-card p {
+            color: var(--texto-light);
+            line-height: 1.8;
+        }
+
+        /* ============================================
+           SECCIÓN PRODUCTOS Y SERVICIOS
+           ============================================ */
+        .productos {
+            background: var(--beige-light);
+        }
+
+        .productos-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            border: 2px solid var(--cafe);
+            background: transparent;
+            color: var(--cafe);
+            border-radius: 5px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--cafe);
+            color: var(--blanco);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .servicios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .servicio-card {
+            background: var(--blanco);
+            padding: 30px 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 15px var(--sombra);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .servicio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--sombra-fuerte);
+        }
+
+        .servicio-card i {
+            font-size: 2.8rem;
+            color: var(--cafe);
+            margin-bottom: 20px;
+        }
+
+        .servicio-card h4 {
+            font-size: 1.1rem;
+            color: var(--cafe-dark);
+            margin-bottom: 10px;
+        }
+
+        .servicio-card p {
+            font-size: 0.9rem;
+            color: var(--texto-light);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           SECCIÓN TECNOLOGÍAS
+           ============================================ */
+        .tecnologias {
+            background: var(--blanco);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 25px;
+        }
+
+        .tech-item {
+            text-align: center;
+            padding: 25px 15px;
+            background: var(--beige-light);
+            border-radius: 10px;
+            border: 1px solid var(--beige-dark);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px var(--sombra);
+        }
+
+        .tech-item i {
+            font-size: 3rem;
+            color: var(--cafe);
+            margin-bottom: 10px;
+        }
+
+        .tech-item span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--texto);
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           SECCIÓN PORTAFOLIO
+           ============================================ */
+        .portafolio {
+            background: var(--beige-light);
+        }
+
+        .portafolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+        }
+
+        .proyecto-card {
+            background: var(--blanco);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px var(--sombra);
+            transition: transform 0.3s;
+        }
+
+        .proyecto-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .proyecto-img {
+            height: 200px;
+            background: var(--beige);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--cafe-accent);
+        }
+
+        .proyecto-info {
+            padding: 25px;
+        }
+
+        .proyecto-info h4 {
+            font-size: 1.2rem;
+            color: var(--cafe-dark);
+            margin-bottom: 10px;
+        }
+
+        .proyecto-info p {
+            font-size: 0.9rem;
+            color: var(--texto-light);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .proyecto-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .proyecto-tags span {
+            padding: 4px 12px;
+            background: var(--beige);
+            color: var(--cafe);
+            font-size: 0.8rem;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        /* ============================================
+           SECCIÓN BENEFICIOS
+           ============================================ */
+        .beneficios {
+            background: var(--blanco);
+        }
+
+        .beneficios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .beneficio-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: var(--beige-light);
+            border-radius: 10px;
+            border: 1px solid var(--beige-dark);
+        }
+
+        .beneficio-card .beneficio-icon {
+            flex-shrink: 0;
+            width: 55px;
+            height: 55px;
+            background: var(--cafe);
+            color: var(--blanco);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .beneficio-card h4 {
+            font-size: 1.1rem;
+            color: var(--cafe-dark);
+            margin-bottom: 8px;
+        }
+
+        .beneficio-card p {
+            font-size: 0.9rem;
+            color: var(--texto-light);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           SECCIÓN TESTIMONIOS
+           ============================================ */
+        .testimonios {
+            background: var(--beige-light);
+        }
+
+        .testimonios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .testimonio-card {
+            background: var(--blanco);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px var(--sombra);
+            position: relative;
+        }
+
+        .testimonio-card::before {
+            content: '\201C';
+            font-size: 4rem;
+            color: var(--beige-dark);
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .testimonio-card p {
+            font-style: italic;
+            color: var(--texto-light);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .testimonio-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonio-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--cafe);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blanco);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .testimonio-name {
+            font-weight: 600;
+            color: var(--cafe-dark);
+            font-size: 0.95rem;
+        }
+
+        .testimonio-role {
+            font-size: 0.8rem;
+            color: var(--texto-light);
+        }
+
+        .testimonio-stars {
+            color: var(--cafe-accent);
+            margin-bottom: 5px;
+        }
+
+        /* ============================================
+           SECCIÓN PREGUNTAS FRECUENTES
+           ============================================ */
+        .faq {
+            background: var(--blanco);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border: 1px solid var(--beige-dark);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            background: var(--beige-light);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 18px 25px;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--cafe-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: var(--beige);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s;
+            color: var(--cafe);
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            padding: 0 25px;
+        }
+
+        .faq-answer.active {
+            max-height: 300px;
+            padding: 0 25px 20px;
+        }
+
+        .faq-answer p {
+            color: var(--texto-light);
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           SECCIÓN CONTACTO
+           ============================================ */
+        .contacto {
+            background: var(--beige-light);
+        }
+
+        .contacto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contacto-info h3 {
+            font-size: 1.5rem;
+            color: var(--cafe-dark);
+            margin-bottom: 20px;
+        }
+
+        .contacto-info p {
+            color: var(--texto-light);
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .contacto-dato {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .contacto-dato i {
+            width: 40px;
+            height: 40px;
+            background: var(--cafe);
+            color: var(--blanco);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .contacto-dato span {
+            color: var(--texto);
+            font-size: 0.95rem;
+        }
+
+        .redes-sociales {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .redes-sociales a {
+            width: 42px;
+            height: 42px;
+            background: var(--cafe);
+            color: var(--blanco);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .redes-sociales a:hover {
+            background: var(--cafe-dark);
+            transform: translateY(-3px);
+        }
+
+        .contacto-form {
+            background: var(--blanco);
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px var(--sombra);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--cafe-dark);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--beige-dark);
+            border-radius: 5px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--beige-light);
+            color: var(--texto);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--cafe);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--cafe);
+            color: var(--blanco);
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .form-submit:hover {
+            background: var(--cafe-dark);
+        }
+
+        .form-message {
+            display: none;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form-message.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--cafe-dark);
+            color: var(--beige);
+            padding: 50px 0 25px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer h4 {
+            color: var(--blanco);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .footer p, .footer a {
+            color: var(--beige-dark);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .footer a:hover {
+            color: var(--blanco);
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 25px;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.85rem;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--blanco);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                box-shadow: 0 5px 20px var(--sombra);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-content h2 {
+                font-size: 2.5rem;
+            }
+
+            .nosotros-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mision-vision {
+                grid-template-columns: 1fr;
+            }
+
+            .contacto-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portafolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-content h2 {
+                font-size: 2rem;
+                letter-spacing: 3px;
+            }
+
+            .hero-content .tagline {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.7rem;
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .hero-content .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .beneficios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonios-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           SCROLL TO TOP BUTTON
+           ============================================ */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background: var(--cafe);
+            color: var(--blanco);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px var(--sombra-fuerte);
+        }
+
+        .scroll-top:hover {
+            background: var(--cafe-dark);
+            transform: translateY(-3px);
+        }
+
+        .scroll-top.visible {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         BARRA DE NAVEGACIÓN
+         ============================================ -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#inicio" class="navbar-brand">
+                <i class="fas fa-moon logo-icon"></i>
+                <h1>MOON</h1>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#productos">Cursos</a></li>
+                <li><a href="#tecnologias">Metodología</a></li>
+                <li><a href="#portafolio">Módulos</a></li>
+                <li><a href="#beneficios">Beneficios</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         SECCIÓN 1: INICIO / HERO
+         ============================================ -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <i class="fas fa-moon hero-icon"></i>
+            <h2>MOON</h2>
+            <p class="tagline">Aprender Lenguas a través de la Tecnología</p>
+            <p>Somos una plataforma interactiva de aprendizaje de lenguas impulsada por tecnología. Ofrecemos lecciones dinámicas, práctica de vocabulario y ejercicios interactivos de Inglés e Italiano diseñados para acelerar tu fluidez.</p>
+            <div class="hero-buttons">
+                <a href="login.html" class="btn-primary">
+                    <i class="fas fa-rocket"></i> ¡Empieza a Aprender!
+                </a>
+                <a href="#productos" class="btn-secondary">
+                    <i class="fas fa-book-open"></i> Nuestros Cursos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 2: NOSOTROS
+         ============================================ -->
+    <section class="nosotros" id="nosotros">
+        <div class="container">
+            <h2 class="section-title">Sobre Nosotros</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Conoce nuestra historia, nuestro equipo y los valores que nos definen como plataforma de aprendizaje lingüístico.</p>
+
+            <div class="nosotros-grid">
+                <div class="nosotros-text">
+                    <h3><i class="fas fa-history"></i> Nuestra Historia</h3>
+                    <p>MOON nació con la visión de revolucionar la enseñanza de idiomas a través de tecnología intuitiva y accesible. Combinamos pedagogía moderna con herramientas interactivas para que personas de todas las edades dominen nuevas lenguas como el Inglés y el Italiano de forma ágil, práctica y divertida.</p>
+                    <p>A lo largo del tiempo, hemos desarrollado una metodología basada en la práctica constante, la inmersión de vocabulario y el aprendizaje adaptativo.</p>
+                </div>
+                <div class="nosotros-image">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+            </div>
+
+            <div class="nosotros-grid">
+                <div class="nosotros-image">
+                    <i class="fas fa-language"></i>
+                </div>
+                <div class="nosotros-text">
+                    <h3><i class="fas fa-user-friends"></i> ¿Quiénes Somos?</h3>
+                    <p>Somos un equipo de lingüistas, educadores y especialistas en tecnología educativa apasionados por conectar el mundo a través del aprendizaje de idiomas. Diseñamos lecciones personalizadas, ejercicios interactivos y evaluaciones dinámicas.</p>
+                    <p>Combinamos creatividad, metodologías pedagógicas comprobadas y tecnología de vanguardia para garantizar una experiencia educativa enriquecedora.</p>
+                </div>
+            </div>
+
+            <!-- Misión y Visión -->
+            <div class="mision-vision">
+                <div class="mision-card">
+                    <h3><i class="fas fa-bullseye"></i> Misión</h3>
+                    <p>Proporcionar una plataforma de aprendizaje de idiomas accesible, interactiva y efectiva que permita a los estudiantes comunicarse con fluidez en Inglés e Italiano, abriendo puertas profesionales y culturales a nivel global.</p>
+                </div>
+                <div class="vision-card">
+                    <h3><i class="fas fa-eye"></i> Visión</h3>
+                    <p>Ser la plataforma de aprendizaje de lenguas líder en Latinoamérica, reconocida por su excelencia pedagógica, innovación tecnológica y por inspirar a miles de personas a dominar nuevos idiomas.</p>
+                </div>
+            </div>
+
+            <!-- Valores -->
+            <h3 class="section-title" style="margin-top:50px; font-size:1.6rem;">Nuestros Valores</h3>
+            <div class="section-divider"></div>
+            <div class="valores-grid">
+                <div class="valor-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>Innovación Educativa</h4>
+                    <p>Aplicamos nuevas metodologías digitales para hacer el aprendizaje más efectivo.</p>
+                </div>
+                <div class="valor-card">
+                    <i class="fas fa-handshake"></i>
+                    <h4>Compromiso</h4>
+                    <p>Nos dedicamos al éxito y progreso constante de cada uno de nuestros estudiantes.</p>
+                </div>
+                <div class="valor-card">
+                    <i class="fas fa-globe"></i>
+                    <h4>Diversidad Cultural</h4>
+                    <p>Fomentamos el entendimiento multicultural y la comunicación global.</p>
+                </div>
+                <div class="valor-card">
+                    <i class="fas fa-users"></i>
+                    <h4>Comunidad</h4>
+                    <p>Creamos un entorno de apoyo e intercambio lingüístico motivador.</p>
+                </div>
+                <div class="valor-card">
+                    <i class="fas fa-award"></i>
+                    <h4>Calidad Pedagógica</h4>
+                    <p>Garantizamos lecciones bien estructuradas y contenidos con rigor lingüístico.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 3: CURSOS Y PROGRAMAS DE IDIOMAS
+         ============================================ -->
+    <section class="productos" id="productos">
+        <div class="container">
+            <h2 class="section-title">Cursos de Idiomas</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Explora nuestros programas diseñados para llevarte desde el nivel principiante hasta el intermedio y avanzado.</p>
+
+            <div class="productos-tabs">
+                <button class="tab-btn active" data-tab="nube">
+                    <i class="fas fa-language"></i> Curso de Inglés
+                </button>
+                <button class="tab-btn" data-tab="movil">
+                    <i class="fas fa-globe-europe"></i> Curso de Italiano
+                </button>
+            </div>
+
+            <!-- Tab: Inglés -->
+            <div class="tab-content active" id="tab-nube">
+                <div class="servicios-grid">
+                    <div class="servicio-card">
+                        <i class="fas fa-seedling"></i>
+                        <h4>Nivel 1 — Principiante (A1)</h4>
+                        <p>Saludos, números, colores y expresiones cotidianas esenciales para iniciar tu aprendizaje en inglés.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-comment-dots"></i>
+                        <h4>Nivel 2 — Elemental (A2)</h4>
+                        <p>Vocabulario sobre familia, alimentos, días de la semana y oraciones simples del día a día.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-plane"></i>
+                        <h4>Nivel 3 — Intermedio (B1)</h4>
+                        <p>Conversaciones de viajes, aeropuertos, ambiente laboral, verbos comunes y gramática fluida.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-spell-check"></i>
+                        <h4>Práctica de Vocabulario</h4>
+                        <p>Módulos de memorización y guía de pronunciación fonética simplificada en inglés.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-trophy"></i>
+                        <h4>Evaluaciones Interactivas</h4>
+                        <p>Pruebas de opción múltiple y escritura con calificación automática para medir tu avance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Italiano -->
+            <div class="tab-content" id="tab-movil">
+                <div class="servicios-grid">
+                    <div class="servicio-card">
+                        <i class="fas fa-seedling"></i>
+                        <h4>Livello 1 — Principiante (A1)</h4>
+                        <p>Saluti, numeri, colori y expresiones de la vida cotidiana en Italia.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-comment-dots"></i>
+                        <h4>Livello 2 — Elementare (A2)</h4>
+                        <p>Vocabulario de la familia, comida italiana, días de la semana y frases estructuradas.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-plane-departure"></i>
+                        <h4>Livello 3 — Intermedio (B1)</h4>
+                        <p>Viajes por Italia, trabajo, verbos frecuentes y conversaciones contextuales reales.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-landmark"></i>
+                        <h4>Cultura e Italiano Práctico</h4>
+                        <p>Aprende la riqueza lingüística y los giros idiomáticos más populares de la lengua italiana.</p>
+                    </div>
+                    <div class="servicio-card">
+                        <i class="fas fa-pen-fancy"></i>
+                        <h4>Ejercicios de Escritura</h4>
+                        <p>Prácticas guiadas para reforzar la gramática y ortografía del idioma italiano.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 4: METODOLOGÍA Y HERRAMIENTAS
+         ============================================ -->
+    <section class="tecnologias" id="tecnologias">
+        <div class="container">
+            <h2 class="section-title">Metodología y Herramientas</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Combinamos las mejores técnicas de aprendizaje pedagógico y tecnológico para potenciar tu fluidez.</p>
+
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversación Práctica</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-volume-up"></i>
+                    <span>Guías de Pronunciación</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Gamificación</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Seguimiento de Progreso</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-brain"></i>
+                    <span>Repetición Espaciada</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Acceso Multiplataforma</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Lectura y Escritura</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Lecciones Flexibles</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 5: MÓDULOS DESTACADOS
+         ============================================ -->
+    <section class="portafolio" id="portafolio">
+        <div class="container">
+            <h2 class="section-title">Módulos Destacados</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Conoce algunas de las lecciones más populares disponibles en la plataforma MOON.</p>
+
+            <div class="portafolio-grid">
+                <!-- Módulo 1 -->
+                <div class="proyecto-card">
+                    <div class="proyecto-img">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="proyecto-info">
+                        <h4>Inglés para la Vida Cotidiana</h4>
+                        <p>Módulo interactivo enfocado en conversaciones reales, saludos, números, colores y frases esenciales para desenvolverte con fluidez en países de habla inglesa.</p>
+                        <div class="proyecto-tags">
+                            <span>A1-A2</span>
+                            <span>Saludos</span>
+                            <span>Vocabulario</span>
+                            <span>Frases Útiles</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 2 -->
+                <div class="proyecto-card">
+                    <div class="proyecto-img">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="proyecto-info">
+                        <h4>Italiano Práctico y Cultural</h4>
+                        <p>Curso completo de italiano con enfoque inmersivo: saluti, cibo italiano, viaggi y giros lingüísticos reales para comunicarte con confianza.</p>
+                        <div class="proyecto-tags">
+                            <span>A1-B1</span>
+                            <span>Cultura Italiana</span>
+                            <span>Gramática</span>
+                            <span>Conversación</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 3 -->
+                <div class="proyecto-card">
+                    <div class="proyecto-img">
+                        <i class="fas fa-plane-departure"></i>
+                    </div>
+                    <div class="proyecto-info">
+                        <h4>Inglés & Italiano para Viajes y Trabajo</h4>
+                        <p>Lecciones especializadas de nivel intermedio orientadas al vocabulario de aeropuerto, reservaciones, entornos laborales, reuniones y verbos frecuentes.</p>
+                        <div class="proyecto-tags">
+                            <span>B1 Intermedio</span>
+                            <span>Aeropuerto</span>
+                            <span>Trabajo</span>
+                            <span>Verbos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 6: BENEFICIOS
+         ============================================ -->
+    <section class="beneficios" id="beneficios">
+        <div class="container">
+            <h2 class="section-title">Beneficios de Aprender en MOON</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Descubre por qué miles de estudiantes eligen nuestra plataforma para dominar nuevos idiomas.</p>
+
+            <div class="beneficios-grid">
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div>
+                        <h4>Aprende a tu Propio Ritmo</h4>
+                        <p>Estudia cuando quieras y avanza según tus tiempos libres sin presiones ni horarios rígidos.</p>
+                    </div>
+                </div>
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <h4>Retroalimentación Inmediata</h4>
+                        <p>Corrige tus respuestas de selección múltiple y escritura al instante para afianzar el conocimiento.</p>
+                    </div>
+                </div>
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <h4>Estructura por Niveles</h4>
+                        <p>Progresa de forma guiada desde el nivel principiante hasta alcanzar niveles intermedios con solidez.</p>
+                    </div>
+                </div>
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <h4>Métricas y Avance</h4>
+                        <p>Visualiza tu porcentaje de lecciones completadas y puntajes promedio en cada idioma.</p>
+                    </div>
+                </div>
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-laptop-house"></i>
+                    </div>
+                    <div>
+                        <h4>Acceso Multiplataforma</h4>
+                        <p>Accede desde tu teléfono móvil, tablet o computadora en cualquier momento con conexión a internet.</p>
+                    </div>
+                </div>
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <div>
+                        <h4>Contenido Útil y Real</h4>
+                        <p>Enfocado en vocabulario y frases prácticas que usarás en situaciones de la vida cotidiana y laboral.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 7: TESTIMONIOS
+         ============================================ -->
+    <section class="testimonios" id="testimonios">
+        <div class="container">
+            <h2 class="section-title">Testimonios de Estudiantes</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Lo que nuestros estudiantes dicen sobre su experiencia aprendiendo lenguas en MOON.</p>
+
+            <div class="testimonios-grid">
+                <div class="testimonio-card">
+                    <div class="testimonio-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>Gracias a MOON logré aprender las frases y vocabulario en inglés que necesitaba para mi viaje. La plataforma es súper clara y las lecciones son muy entretenidas.</p>
+                    <div class="testimonio-author">
+                        <div class="testimonio-avatar">MC</div>
+                        <div>
+                            <div class="testimonio-name">María Castillo</div>
+                            <div class="testimonio-role">Estudiante de Inglés</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonio-card">
+                    <div class="testimonio-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>La sección de italiano es fantástica. Empecé desde cero con los saludos y números, y ahora puedo armar frases completas y entender conversaciones simples.</p>
+                    <div class="testimonio-author">
+                        <div class="testimonio-avatar">AR</div>
+                        <div>
+                            <div class="testimonio-name">Andrés Ramírez</div>
+                            <div class="testimonio-role">Estudiante de Italiano</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonio-card">
+                    <div class="testimonio-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p>El sistema de niveles me motiva mucho. Puedo ver mi porcentaje de avance y repasar las lecciones cuantas veces quiera. ¡100% recomendada!</p>
+                    <div class="testimonio-author">
+                        <div class="testimonio-avatar">LP</div>
+                        <div>
+                            <div class="testimonio-name">Laura Pérez</div>
+                            <div class="testimonio-role">Estudiante Nivel Intermedio</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonio-card">
+                    <div class="testimonio-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>Me encanta que puedo practicar vocabulario y escritura al mismo tiempo. Es la herramienta de idiomas más práctica e intuitiva que he usado.</p>
+                    <div class="testimonio-author">
+                        <div class="testimonio-avatar">JG</div>
+                        <div>
+                            <div class="testimonio-name">Jorge Gutiérrez</div>
+                            <div class="testimonio-role">Estudiante de Inglés B1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 8: PREGUNTAS FRECUENTES
+         ============================================ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title">Preguntas Frecuentes</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">Resolvemos las dudas más comunes sobre nuestros cursos de lenguas.</p>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        ¿Qué idiomas puedo aprender en MOON?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Actualmente ofrecemos programas estructurados en Inglés e Italiano, divididos en niveles Principiante, Elemental e Intermedio, con lecciones prácticas de vocabulario y gramática.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        ¿Necesito conocimientos previos para empezar?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No, puedes comenzar totalmente desde cero. El Nivel 1 está diseñado para enseñarte saludos, números, colores y frases fundamentales paso a paso.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        ¿Cómo se guarda mi progreso de lecciones?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Una vez que creas tu cuenta e inicias sesión, tu avance en cada idioma y nivel se guarda automáticamente en tu perfil para que continúes en cualquier momento.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        ¿Puedo repetir las lecciones completadas?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>¡Sí! Puedes volver a tomar cualquier lección o ejercicio en cualquier momento para reforzar tu vocabulario y mejorar tu calificación.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        ¿Qué tipo de ejercicios incluye la plataforma?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Incluye fichas de vocabulario con pronunciación fonética, preguntas de selección múltiple y ejercicios de escritura interactivos con verificación inmediata.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        ¿Puedo acceder desde mi dispositivo móvil?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Por supuesto, MOON es totalmente responsive y adaptable a teléfonos móviles, tablets y computadoras de escritorio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECCIÓN 9: CONTACTO
+         ============================================ -->
+    <section class="contacto" id="contacto">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">¿Tienes alguna duda o sugerencia sobre nuestros cursos de idiomas? Escríbenos.</p>
+
+            <div class="contacto-grid">
+                <div class="contacto-info">
+                    <h3>Información de Contacto</h3>
+                    <p>Estamos listos para escucharte. Comunícate con nosotros para cualquier inquietud sobre la plataforma de aprendizaje.</p>
+
+                    <div class="contacto-dato">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Calle 50 #45-20, Bogotá, Colombia</span>
+                    </div>
+                    <div class="contacto-dato">
+                        <i class="fas fa-envelope"></i>
+                        <span>juanherazo72010@gmail.com</span>
+                    </div>
+                    <div class="contacto-dato">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+57 322 408 1914</span>
+                    </div>
+                    <div class="contacto-dato">
+                        <i class="fas fa-clock"></i>
+                        <span>Lunes a Viernes: 8:00 AM - 6:00 PM</span>
+                    </div>
+
+                    <div class="redes-sociales">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+                <div class="contacto-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="nombre"><i class="fas fa-user"></i> Nombre Completo</label>
+                            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                            <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="+57 300 000 0000">
+                        </div>
+                        <div class="form-group">
+                            <label for="mensaje"><i class="fas fa-comment-dots"></i> Mensaje</label>
+                            <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos qué idioma deseas aprender o tus inquietudes..." required></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                        <div class="form-message" id="formMessage">
+                            <i class="fas fa-check-circle"></i> ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h4><i class="fas fa-moon"></i> MOON</h4>
+                    <p>MOON es una plataforma de tecnología educativa dedicada a la enseñanza y aprendizaje interactivo de lenguas. Transformamos la educación con herramientas dinámicas e intuitivas.</p>
+                </div>
+                <div>
+                    <h4>Enlaces Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#inicio"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                        <li><a href="#nosotros"><i class="fas fa-chevron-right"></i> Nosotros</a></li>
+                        <li><a href="#productos"><i class="fas fa-chevron-right"></i> Cursos</a></li>
+                        <li><a href="#portafolio"><i class="fas fa-chevron-right"></i> Módulos</a></li>
+                        <li><a href="#contacto"><i class="fas fa-chevron-right"></i> Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Idiomas & Cursos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#productos"><i class="fas fa-chevron-right"></i> Curso de Inglés</a></li>
+                        <li><a href="#productos"><i class="fas fa-chevron-right"></i> Curso de Italiano</a></li>
+                        <li><a href="#productos"><i class="fas fa-chevron-right"></i> Nivel Principiante</a></li>
+                        <li><a href="#productos"><i class="fas fa-chevron-right"></i> Nivel Intermedio</a></li>
+                        <li><a href="#contacto"><i class="fas fa-chevron-right"></i> Práctica de Vocabulario</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Calle 50 #45-20, Bogotá</p>
+                    <p><i class="fas fa-envelope"></i> juanherazo72010@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +57 322 408 1914</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MOON - Todos los derechos reservados. | Diseñado con <i class="fas fa-heart" style="color: #c0392b;"></i> por MOON Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón Scroll to Top -->
+    <button class="scroll-top" id="scrollTop" aria-label="Ir arriba">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        // ==========================================
+        // Menú Hamburguesa (Responsive)
+        // ==========================================
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            // Animación del hamburger
+            hamburger.classList.toggle('active');
+        });
+
+        // Cerrar menú al hacer click en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        // ==========================================
+        // Tabs de Productos y Servicios
+        // ==========================================
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remover active de todos
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(t => t.classList.remove('active'));
+
+                // Activar el seleccionado
+                btn.classList.add('active');
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById('tab-' + tabId).classList.add('active');
+            });
+        });
+
+        // ==========================================
+        // Preguntas Frecuentes (Acordeón)
+        // ==========================================
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+
+                // Cerrar todas las preguntas
+                faqQuestions.forEach(q => {
+                    q.classList.remove('active');
+                    q.nextElementSibling.classList.remove('active');
+                });
+
+                // Si no estaba activa, abrirla
+                if (!isActive) {
+                    question.classList.add('active');
+                    answer.classList.add('active');
+                }
+            });
+        });
+
+        // ==========================================
+        // Formulario de Contacto
+        // ==========================================
+        const contactForm = document.getElementById('contactForm');
+        const formMessage = document.getElementById('formMessage');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Mostrar mensaje de éxito
+            formMessage.classList.add('success');
+
+            // Limpiar formulario
+            contactForm.reset();
+
+            // Ocultar mensaje después de 5 segundos
+            setTimeout(() => {
+                formMessage.classList.remove('success');
+            }, 5000);
+        });
+
+        // ==========================================
+        // Botón Scroll to Top
+        // ==========================================
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // ==========================================
+        // Navbar cambio al hacer scroll
+        // ==========================================
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 20px rgba(74, 53, 32, 0.15)';
+            } else {
+                navbar.style.boxShadow = '0 2px 15px rgba(74, 53, 32, 0.1)';
+            }
+        });
+    </script>
+
+</body>
+</html>
